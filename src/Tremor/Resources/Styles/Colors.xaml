@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <!-- Tremor palette (dark, exchange-style) -->
+    <Color x:Key="Background">#0B0E11</Color>
+    <Color x:Key="Surface">#161A1E</Color>
+    <Color x:Key="SurfaceAlt">#1E2329</Color>
+    <Color x:Key="Primary">#F0B90B</Color>
+    <Color x:Key="TextPrimary">#EAECEF</Color>
+    <Color x:Key="TextSecondary">#848E9C</Color>
+    <Color x:Key="Up">#0ECB81</Color>
+    <Color x:Key="Down">#F6465D</Color>
+    <Color x:Key="Warning">#F0B90B</Color>
+
+    <SolidColorBrush x:Key="BackgroundBrush" Color="{StaticResource Background}" />
+    <SolidColorBrush x:Key="SurfaceBrush" Color="{StaticResource Surface}" />
+    <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource Primary}" />
+
+</ResourceDictionary>

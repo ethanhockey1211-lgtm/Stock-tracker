@@ -1,0 +1,15 @@
+<Project>
+
+  <!-- Shared build settings applied to every project in the solution. -->
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <Company>Tremor</Company>
+    <Product>Tremor</Product>
+    <Authors>Tremor</Authors>
+    <NeutralLanguage>en-US</NeutralLanguage>
+  </PropertyGroup>
+
+</Project>

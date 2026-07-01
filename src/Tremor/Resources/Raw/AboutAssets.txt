@@ -1,0 +1,1 @@
+This folder is for raw assets bundled with the app.

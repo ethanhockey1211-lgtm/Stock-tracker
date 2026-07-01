@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Tremor.ViewModels"
+             x:Class="Tremor.Views.SettingsPage"
+             x:DataType="vm:SettingsViewModel"
+             Title="Settings">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="16" Spacing="16">
+
+            <Border Style="{StaticResource Card}">
+                <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto" RowSpacing="4">
+                    <Label Grid.Row="0" Grid.Column="0"
+                           Text="Push notifications"
+                           FontAttributes="Bold" />
+                    <Label Grid.Row="1" Grid.Column="0"
+                           Text="Get notified when volume spikes, large wallet moves, or new listings are detected."
+                           Style="{StaticResource SecondaryLabel}" />
+                    <Switch Grid.Row="0" Grid.Column="1" Grid.RowSpan="2"
+                            OnColor="{StaticResource Primary}"
+                            IsToggled="{Binding PushNotificationsEnabled}" />
+                </Grid>
+            </Border>
+
+            <Border Style="{StaticResource Card}">
+                <VerticalStackLayout Spacing="8">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Grid.Column="0" Text="Plan" FontAttributes="Bold" />
+                        <Label Grid.Column="1"
+                               Text="{Binding TierLabel}"
+                               TextColor="{StaticResource Primary}"
+                               FontAttributes="Bold" />
+                    </Grid>
+                    <Label Text="Premium is scaffolded but not yet available. Nothing is gated or billed in this build."
+                           Style="{StaticResource SecondaryLabel}" />
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Grid.Column="0"
+                               Text="Simulate Premium (dev only)"
+                               Style="{StaticResource SecondaryLabel}"
+                               VerticalTextAlignment="Center" />
+                        <Switch Grid.Column="1"
+                                OnColor="{StaticResource Primary}"
+                                IsToggled="{Binding IsPremium}" />
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+
+            <Label Text="{Binding Version}"
+                   Style="{StaticResource SecondaryLabel}"
+                   HorizontalTextAlignment="Center" />
+
+            <Label Text="{Binding Disclaimer}"
+                   Style="{StaticResource SecondaryLabel}"
+                   FontSize="10"
+                   HorizontalTextAlignment="Center" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

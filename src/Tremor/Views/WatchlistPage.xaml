@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Tremor.ViewModels"
+             x:Class="Tremor.Views.WatchlistPage"
+             x:DataType="vm:WatchlistViewModel"
+             Title="Watchlist">
+
+    <Grid RowDefinitions="Auto,*" Padding="16" RowSpacing="12">
+
+        <!-- Add token bar -->
+        <VerticalStackLayout Grid.Row="0" Spacing="6">
+            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                <Entry Grid.Column="0"
+                       Text="{Binding NewSymbol}"
+                       Placeholder="Add a pair, e.g. BTCUSDT"
+                       ReturnCommand="{Binding AddCommand}" />
+                <Button Grid.Column="1"
+                        Text="Add"
+                        Style="{StaticResource PrimaryButton}"
+                        WidthRequest="72"
+                        Command="{Binding AddCommand}" />
+            </Grid>
+            <Label Text="{Binding AddError}"
+                   TextColor="{StaticResource Down}"
+                   FontSize="12" />
+        </VerticalStackLayout>
+
+        <!-- Empty state -->
+        <Label Grid.Row="1"
+               Text="{Binding EmptyMessage}"
+               Style="{StaticResource SecondaryLabel}"
+               HorizontalTextAlignment="Center"
+               VerticalOptions="Center"
+               IsVisible="{Binding IsEmpty}" />
+
+        <!-- Watchlist -->
+        <CollectionView Grid.Row="1"
+                        ItemsSource="{Binding Items}"
+                        IsVisible="{Binding IsEmpty, Converter={StaticResource InvertedBool}}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="vm:WatchlistRowViewModel">
+                    <SwipeView Margin="0,4">
+                        <SwipeView.RightItems>
+                            <SwipeItems>
+                                <SwipeItem Text="Remove"
+                                           BackgroundColor="{StaticResource Down}"
+                                           Command="{Binding Source={RelativeSource AncestorType={x:Type CollectionView}}, Path=BindingContext.RemoveCommand}"
+                                           CommandParameter="{Binding .}" />
+                            </SwipeItems>
+                        </SwipeView.RightItems>
+                        <Border Style="{StaticResource Card}">
+                            <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
+                                <Label Grid.Row="0" Grid.Column="0"
+                                       Text="{Binding Pair}"
+                                       FontAttributes="Bold"
+                                       FontSize="16" />
+                                <Label Grid.Row="1" Grid.Column="0"
+                                       Text="{Binding QuoteVolume, StringFormat='24h vol: {0:N0}'}"
+                                       Style="{StaticResource SecondaryLabel}" />
+
+                                <Label Grid.Row="0" Grid.Column="1"
+                                       HorizontalTextAlignment="End"
+                                       Text="{Binding Price, StringFormat='{0:N4}'}"
+                                       FontAttributes="Bold" />
+                                <Label Grid.Row="1" Grid.Column="1"
+                                       HorizontalTextAlignment="End"
+                                       Text="{Binding PriceChangePercent, StringFormat='{0:+0.00;-0.00}%'}"
+                                       TextColor="{Binding PriceChangePercent, Converter={StaticResource ChangeToColor}}" />
+                            </Grid>
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type CollectionView}}, Path=BindingContext.ViewOnExchangeCommand}"
+                                    CommandParameter="{Binding .}" />
+                            </Border.GestureRecognizers>
+                        </Border>
+                    </SwipeView>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+    </Grid>
+</ContentPage>

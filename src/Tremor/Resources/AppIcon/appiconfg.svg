@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="456" height="456" viewBox="0 0 456 456" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Stylized "seismograph" mark for Tremor -->
+  <g stroke="#F0B90B" stroke-width="18" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <polyline points="108,228 160,228 190,150 228,306 266,180 296,228 348,228" />
+  </g>
+</svg>

@@ -1,0 +1,56 @@
+# .NET / MAUI build output
+[Bb]in/
+[Oo]bj/
+[Oo]ut/
+[Ll]og/
+[Ll]ogs/
+
+# Visual Studio / Rider / VS Code
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.userprefs
+
+# MAUI / platform artifacts
+*.binlog
+*.apk
+*.aab
+*.ipa
+*.app/
+*.appx
+*.appxbundle
+*.msix
+Platforms/Android/keystore/
+*.keystore
+*.jks
+
+# NuGet
+*.nupkg
+*.snupkg
+.nuget/
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Test results
+[Tt]est[Rr]esult*/
+*.trx
+*.coverage
+*.coveragexml
+coverage*.json
+coverage*.xml
+coverage*.info
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Local secrets / config (never commit real keys)
+appsettings.local.json
+secrets.json
+*.env
+.env

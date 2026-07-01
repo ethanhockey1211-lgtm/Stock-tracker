@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Tremor.ViewModels"
+             xmlns:models="clr-namespace:Tremor.Core.Models;assembly=Tremor.Core"
+             x:Class="Tremor.Views.ListingsPage"
+             x:DataType="vm:ListingsViewModel"
+             Title="New listings">
+
+    <Grid Padding="16">
+        <RefreshView Command="{Binding RefreshCommand}" IsRefreshing="{Binding IsBusy}">
+            <CollectionView ItemsSource="{Binding Listings}">
+                <CollectionView.EmptyView>
+                    <Label Text="{Binding EmptyMessage}"
+                           Style="{StaticResource SecondaryLabel}"
+                           HorizontalTextAlignment="Center"
+                           VerticalOptions="Center" />
+                </CollectionView.EmptyView>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:TokenListing">
+                        <Border Style="{StaticResource Card}" Margin="0,4">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <VerticalStackLayout Grid.Column="0" Spacing="2">
+                                    <Label Text="{Binding Pair}" FontAttributes="Bold" FontSize="16" />
+                                    <Label Text="{Binding Venue}" Style="{StaticResource SecondaryLabel}" />
+                                </VerticalStackLayout>
+                                <Label Grid.Column="1"
+                                       HorizontalTextAlignment="End"
+                                       VerticalTextAlignment="Center"
+                                       Text="{Binding DetectedUtc, StringFormat='{0:t} UTC'}"
+                                       Style="{StaticResource SecondaryLabel}" />
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+    </Grid>
+</ContentPage>
