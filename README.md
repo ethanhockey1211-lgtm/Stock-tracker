@@ -92,7 +92,13 @@ dotnet build src/Tremor/Tremor.csproj -f net9.0-android
 Defaults work with zero configuration. Tunables live in
 [`TremorOptions`](src/Tremor.Core/Configuration/TremorOptions.cs): Binance URLs,
 poll interval, volume-spike thresholds, whale thresholds, and the affiliate link
-template. **Replace `TREMOR_PLACEHOLDER`** in the affiliate template before shipping.
+template.
+
+At startup the app loads [`Resources/Raw/appsettings.json`](src/Tremor/Resources/Raw/appsettings.json)
+and binds its `Tremor` section over those defaults, so thresholds and the
+affiliate link can change without recompiling (the file is optional — if it's
+missing, code defaults apply). **Replace `TREMOR_PLACEHOLDER`** in the affiliate
+template there before shipping.
 
 ## Before shipping — checklist
 
