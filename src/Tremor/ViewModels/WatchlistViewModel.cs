@@ -125,6 +125,27 @@ public partial class WatchlistViewModel : BaseViewModel
         }).ConfigureAwait(false);
     }
 
+    /// <summary>Navigate to the token's detail screen.</summary>
+    [RelayCommand]
+    private async Task OpenDetailAsync(WatchlistRowViewModel? row)
+    {
+        if (row is null)
+        {
+            return;
+        }
+
+        try
+        {
+            await Shell.Current
+                .GoToAsync($"{AppShell.TokenDetailRoute}?symbol={Uri.EscapeDataString(row.Symbol)}")
+                .ConfigureAwait(false);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Failed to open detail for {Symbol}", row.Symbol);
+        }
+    }
+
     /// <summary>
     /// Opens the token on an exchange via an outbound referral link. Tremor never
     /// executes a trade in-app and never holds funds.

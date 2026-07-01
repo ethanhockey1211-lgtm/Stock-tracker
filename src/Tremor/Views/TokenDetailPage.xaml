@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Tremor.ViewModels"
+             x:Class="Tremor.Views.TokenDetailPage"
+             x:DataType="vm:TokenDetailViewModel"
+             Title="{Binding Pair}">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="16" Spacing="16">
+
+            <Border Style="{StaticResource Card}">
+                <VerticalStackLayout Spacing="6">
+                    <Label Text="{Binding Pair}" Style="{StaticResource HeadingLabel}" />
+
+                    <Label Text="{Binding Price, StringFormat='{0:N4}'}"
+                           FontSize="34"
+                           FontAttributes="Bold" />
+
+                    <Label Text="{Binding PriceChangePercent, StringFormat='24h {0:+0.00;-0.00}%'}"
+                           FontSize="16"
+                           TextColor="{Binding PriceChangePercent, Converter={StaticResource ChangeToColor}}" />
+
+                    <Label Text="{Binding QuoteVolume, StringFormat='24h volume: {0:N0}'}"
+                           Style="{StaticResource SecondaryLabel}" />
+
+                    <Label Text="Fetching live data…"
+                           Style="{StaticResource SecondaryLabel}"
+                           IsVisible="{Binding IsBusy}" />
+                </VerticalStackLayout>
+            </Border>
+
+            <VerticalStackLayout Spacing="6">
+                <Button Text="{Binding ViewOnExchangeText}"
+                        Style="{StaticResource PrimaryButton}"
+                        Command="{Binding ViewOnExchangeCommand}" />
+                <Label Text="{Binding ViewOnExchangeNote}"
+                       Style="{StaticResource SecondaryLabel}"
+                       FontSize="11"
+                       HorizontalTextAlignment="Center" />
+            </VerticalStackLayout>
+
+            <Button Text="Refresh"
+                    Style="{StaticResource LinkButton}"
+                    Command="{Binding RefreshCommand}" />
+
+            <Label Text="{Binding Disclaimer}"
+                   Style="{StaticResource SecondaryLabel}"
+                   FontSize="10"
+                   HorizontalTextAlignment="Center" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

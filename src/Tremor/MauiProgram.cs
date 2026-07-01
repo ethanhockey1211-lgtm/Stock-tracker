@@ -23,6 +23,9 @@ public static class MauiProgram
         // Platform-agnostic services (market data, detection, watchlist, etc.).
         builder.Services.AddTremorCore();
 
+        // Persist watchlist + profile to the app data directory across restarts.
+        builder.Services.AddFilePersistence(FileSystem.AppDataDirectory);
+
         // Platform notification delivery. Swap for a Firebase Cloud Messaging-backed
         // implementation when push is wired up; MarketScanner only depends on the
         // INotificationService abstraction.
@@ -33,12 +36,14 @@ public static class MauiProgram
         builder.Services.AddSingleton<AlertsViewModel>();
         builder.Services.AddSingleton<ListingsViewModel>();
         builder.Services.AddSingleton<SettingsViewModel>();
+        builder.Services.AddTransient<TokenDetailViewModel>();
 
         // Pages.
         builder.Services.AddSingleton<WatchlistPage>();
         builder.Services.AddSingleton<AlertsPage>();
         builder.Services.AddSingleton<ListingsPage>();
         builder.Services.AddSingleton<SettingsPage>();
+        builder.Services.AddTransient<TokenDetailPage>();
 
 #if DEBUG
         builder.Logging.AddDebug();

@@ -32,6 +32,8 @@ build if any user-facing string reads like a prediction or a recommendation.
 | Push notifications | 🟡 placeholder | `INotificationService` / `MauiLocalNotificationService` (logs; FCM/local-notification seam ready) |
 | Free/Premium flag (not gated) | ✅ | `UserProfile.Tier` |
 | Affiliate deep-link placeholder | ✅ | `AffiliateLinkService` (referral code is a placeholder) |
+| Token detail screen | ✅ | `TokenDetailViewModel` (live snapshot + view-on-exchange) |
+| Local persistence (watchlist + profile) | ✅ | `FilePreferencesStore` + `Persistent*Service` |
 
 **Deferred to Phase 2+:** stock scanning, news aggregation, social sentiment,
 options flow, AI pattern detection, real premium billing/paywall.
@@ -98,5 +100,12 @@ template. **Replace `TREMOR_PLACEHOLDER`** in the affiliate template before ship
 - [ ] Implement real push (Firebase Cloud Messaging) + local notifications in
       `INotificationService`.
 - [ ] Replace the affiliate referral placeholder with a real code.
-- [ ] Add persistence for the watchlist and user profile (currently in-memory).
 - [ ] Add app icons/splash bitmaps and (optionally) bundled fonts.
+
+## Continuous integration
+
+`.github/workflows/ci.yml` runs on every push/PR:
+- **core-and-tests** — builds `Tremor.Core` and runs the xUnit suite on Ubuntu
+  (no MAUI workload needed). This is the fast signal.
+- **maui-android** — installs the `maui-android` workload and builds the app for
+  `net9.0-android`, validating the MAUI head (XAML, view models, DI).
