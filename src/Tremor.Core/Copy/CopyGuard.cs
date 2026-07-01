@@ -12,12 +12,15 @@ namespace Tremor.Core.Copy;
 /// </summary>
 public static partial class CopyGuard
 {
-    // Phrases that imply forecasting the future.
+    // Phrases that imply forecasting the future. Note: the bare nouns
+    // "prediction"/"predict" are deliberately NOT listed — copy that *disclaims*
+    // predictions (e.g. "makes no predictions") is compliant. We flag concrete
+    // forward-looking claims instead.
     private static readonly string[] PredictionPhrases =
     [
         "will pump", "about to pump", "about to moon", "going to moon",
-        "will moon", "price target", "forecast", "prediction", "predict",
-        "guaranteed", "will rise", "will fall", "will surge", "next 10x",
+        "will moon", "price target", "forecast", "guaranteed to",
+        "will rise", "will fall", "will surge", "next 10x",
         "sure thing", "can't lose", "cannot lose",
     ];
 

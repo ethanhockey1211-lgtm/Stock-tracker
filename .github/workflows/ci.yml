@@ -40,4 +40,6 @@ jobs:
         run: dotnet workload install maui-android
 
       - name: Build Tremor (net9.0-android)
-        run: dotnet build src/Tremor/Tremor.csproj -c Release -f net9.0-android
+        # Override TargetFrameworks so restore doesn't fan out to the iOS/MacCatalyst
+        # TFMs (whose workloads only install on macOS). This builds android only.
+        run: dotnet build src/Tremor/Tremor.csproj -c Release -p:TargetFrameworks=net9.0-android

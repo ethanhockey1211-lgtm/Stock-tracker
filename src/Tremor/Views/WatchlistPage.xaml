@@ -56,16 +56,16 @@
                                        FontAttributes="Bold"
                                        FontSize="16" />
                                 <Label Grid.Row="1" Grid.Column="0"
-                                       Text="{Binding QuoteVolume, StringFormat='24h vol: {0:N0}'}"
+                                       Text="{Binding QuoteVolume, Converter={StaticResource CompactNumber}, StringFormat='24h vol: {0}'}"
                                        Style="{StaticResource SecondaryLabel}" />
 
                                 <Label Grid.Row="0" Grid.Column="1"
                                        HorizontalTextAlignment="End"
-                                       Text="{Binding Price, StringFormat='{0:N4}'}"
+                                       Text="{Binding Price, Converter={StaticResource Price}}"
                                        FontAttributes="Bold" />
                                 <Label Grid.Row="1" Grid.Column="1"
                                        HorizontalTextAlignment="End"
-                                       Text="{Binding PriceChangePercent, StringFormat='{0:+0.00;-0.00}%'}"
+                                       Text="{Binding PriceChangePercent, Converter={StaticResource SignedPercent}}"
                                        TextColor="{Binding PriceChangePercent, Converter={StaticResource ChangeToColor}}" />
                             </Grid>
                             <Border.GestureRecognizers>

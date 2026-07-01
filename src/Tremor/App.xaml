@@ -14,6 +14,9 @@
             <converters:InvertedBoolConverter x:Key="InvertedBool" />
             <converters:SeverityToColorConverter x:Key="SeverityToColor" />
             <converters:ChangeToColorConverter x:Key="ChangeToColor" />
+            <converters:CompactNumberConverter x:Key="CompactNumber" />
+            <converters:PriceConverter x:Key="Price" />
+            <converters:SignedPercentConverter x:Key="SignedPercent" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

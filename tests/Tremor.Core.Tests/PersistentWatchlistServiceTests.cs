@@ -62,7 +62,7 @@ public class PersistentWatchlistServiceTests
         await service.AddAsync(Doge);
 
         var all = await service.GetAllAsync();
-        Assert.Single(all.Where(i => i.Symbol == "DOGEUSDT"));
+        Assert.Single(all, i => i.Symbol == "DOGEUSDT");
     }
 
     [Fact]
