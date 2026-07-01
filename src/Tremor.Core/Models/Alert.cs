@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 namespace Tremor.Core.Models;
 
 /// <summary>
@@ -26,6 +28,7 @@ public enum AlertSeverity
 /// Alerts describe observations only. They never contain predictions,
 /// price targets, or buy/sell recommendations.
 /// </summary>
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class Alert
 {
     public required string Id { get; init; }
@@ -49,4 +52,6 @@ public class Alert
 
     /// <summary>When the underlying event was detected (UTC).</summary>
     public DateTimeOffset DetectedUtc { get; init; }
+
+    private string DebuggerDisplay => $"{Type} {Severity} {Symbol ?? "<none>"}: {Title}";
 }

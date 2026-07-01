@@ -1,8 +1,11 @@
+using System.Diagnostics;
+
 namespace Tremor.Core.Models;
 
 /// <summary>
 /// A tradeable crypto instrument the app knows about (a symbol on an exchange).
 /// </summary>
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public sealed record Token
 {
     /// <summary>Exchange trading symbol, e.g. "BTCUSDT".</summary>
@@ -18,4 +21,6 @@ public sealed record Token
     public string? DisplayName { get; init; }
 
     public string Pair => $"{BaseAsset}/{QuoteAsset}";
+
+    private string DebuggerDisplay => $"{Symbol} ({Pair})";
 }

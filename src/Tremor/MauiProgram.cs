@@ -46,7 +46,9 @@ public static class MauiProgram
         builder.Services.AddTransient<TokenDetailPage>();
 
 #if DEBUG
+        builder.Logging.ClearProviders();
         builder.Logging.AddDebug();
+        builder.Logging.SetMinimumLevel(LogLevel.Debug);
 #endif
 
         return builder.Build();

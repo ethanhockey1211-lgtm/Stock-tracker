@@ -1,9 +1,12 @@
+using System.Diagnostics;
+
 namespace Tremor.Core.Models;
 
 /// <summary>
 /// A single snapshot of an instrument's market state at a point in time.
 /// Purely descriptive of what has already been observed — never a forecast.
 /// </summary>
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public sealed record PriceTick
 {
     /// <summary>Exchange trading symbol, e.g. "BTCUSDT".</summary>
@@ -23,4 +26,6 @@ public sealed record PriceTick
 
     /// <summary>Time the tick was observed (UTC).</summary>
     public DateTimeOffset TimestampUtc { get; init; }
+
+    private string DebuggerDisplay => $"{Symbol}: {Price} @ {TimestampUtc:O}";
 }

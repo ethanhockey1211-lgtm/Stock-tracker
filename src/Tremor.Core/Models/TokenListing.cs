@@ -1,8 +1,11 @@
+using System.Diagnostics;
+
 namespace Tremor.Core.Models;
 
 /// <summary>
 /// A newly available trading symbol detected on an exchange or DEX.
 /// </summary>
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public sealed record TokenListing
 {
     public required string Symbol { get; init; }
@@ -18,4 +21,6 @@ public sealed record TokenListing
     public DateTimeOffset DetectedUtc { get; init; }
 
     public string Pair => $"{BaseAsset}/{QuoteAsset}";
+
+    private string DebuggerDisplay => $"{Symbol} on {Venue}";
 }

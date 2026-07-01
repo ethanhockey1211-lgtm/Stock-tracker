@@ -1,8 +1,11 @@
+using System.Diagnostics;
+
 namespace Tremor.Core.Models;
 
 /// <summary>
 /// A token a user is tracking, plus its most recently observed tick.
 /// </summary>
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public sealed class WatchlistItem
 {
     public required Token Token { get; init; }
@@ -14,4 +17,6 @@ public sealed class WatchlistItem
     public PriceTick? LatestTick { get; set; }
 
     public string Symbol => Token.Symbol;
+
+    private string DebuggerDisplay => $"{Symbol} ({LatestTick?.Price ?? 0})";
 }

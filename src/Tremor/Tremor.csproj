@@ -32,6 +32,7 @@
     <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">24.0</SupportedOSPlatformVersion>
     <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
     <TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
+    <RuntimeIdentifiers Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">android-arm;android-arm64;android-x86;android-x64</RuntimeIdentifiers>
   </PropertyGroup>
 
   <ItemGroup>
@@ -42,7 +43,12 @@
     <MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#0B0E11" BaseSize="128,128" />
 
     <!-- Images -->
-    <MauiImage Include="Resources\Images\*" />
+    <MauiImage Include="Resources\Images\*.png" />
+    <MauiImage Include="Resources\Images\*.jpg" />
+    <MauiImage Include="Resources\Images\*.jpeg" />
+    <MauiImage Include="Resources\Images\*.gif" />
+    <MauiImage Include="Resources\Images\*.bmp" />
+    <MauiImage Include="Resources\Images\*.svg" />
 
     <!-- Custom Fonts (folder globbed; none bundled in the scaffold) -->
     <MauiFont Include="Resources\Fonts\*" />

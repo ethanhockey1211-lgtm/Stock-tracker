@@ -60,7 +60,12 @@ public sealed class MarketScanner
     /// </summary>
     public async Task RunAsync(CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Market scanner starting");
+        _logger.LogInformation(
+            "Market scanner starting with poll interval {PollInterval} and volume spike thresholds {BaselineWindow}/{MinSamples}/{SpikeMultiple}",
+            _options.PollInterval,
+            _options.VolumeSpike.BaselineWindow,
+            _options.VolumeSpike.MinSamples,
+            _options.VolumeSpike.SpikeMultiple);
 
         var tasks = new[]
         {
@@ -89,29 +94,35 @@ public sealed class MarketScanner
         {
             var items = await _watchlist.GetAllAsync(cancellationToken).ConfigureAwait(false);
             var symbols = items.Select(i => i.Symbol).ToArray();
+            _logger.LogDebug("Volume stream loop starting with {SymbolCount} watched symbols", symbols.Length);
 
             if (symbols.Length == 0)
             {
+                _logger.LogDebug("No symbols on watchlist; sleeping for {Delay}", _options.PollInterval);
                 await DelayQuietlyAsync(_options.PollInterval, cancellationToken).ConfigureAwait(false);
                 continue;
             }
 
             try
             {
+                _logger.LogDebug("Opening market data stream for symbols {Symbols}", string.Join(", ", symbols));
                 await foreach (var tick in _marketData
                     .StreamTickersAsync(symbols, cancellationToken)
                     .WithCancellation(cancellationToken)
                     .ConfigureAwait(false))
                 {
+                    _logger.LogTrace("Observed tick for {Symbol} at {TimestampUtc} with quote volume {QuoteVolume24h}", tick.Symbol, tick.TimestampUtc, tick.QuoteVolume24h);
                     var spike = _volumeDetector.Observe(tick.Symbol, tick.QuoteVolume24h, tick.TimestampUtc);
                     if (spike is not null)
                     {
+                        _logger.LogInformation("Detected volume spike for {Symbol} at {DetectedUtc}", spike.Symbol, spike.DetectedUtc);
                         await PublishAsync(spike, cancellationToken).ConfigureAwait(false);
                     }
 
                     // Rebuild the stream if the watchlist changed underneath us.
                     if (await WatchlistChangedAsync(symbols, cancellationToken).ConfigureAwait(false))
                     {
+                        _logger.LogDebug("Watchlist changed; reconnecting volume stream");
                         break;
                     }
                 }
@@ -122,7 +133,7 @@ public sealed class MarketScanner
             }
             catch (Exception ex)
             {
-                _logger.LogWarning(ex, "Volume stream error; reconnecting");
+                _logger.LogWarning(ex, "Volume stream error; reconnecting for symbols {Symbols}", string.Join(", ", symbols));
                 await DelayQuietlyAsync(TimeSpan.FromSeconds(5), cancellationToken).ConfigureAwait(false);
             }
         }
@@ -135,6 +146,7 @@ public sealed class MarketScanner
             try
             {
                 var listings = await _listings.PollNewListingsAsync(cancellationToken).ConfigureAwait(false);
+                _logger.LogDebug("Listing poll returned {ListingCount} results", listings.Count);
                 foreach (var listing in listings)
                 {
                     var alert = new Alert
@@ -147,6 +159,7 @@ public sealed class MarketScanner
                         Detail = $"{listing.Pair} is now trading on {listing.Venue}.",
                         DetectedUtc = listing.DetectedUtc,
                     };
+                    _logger.LogInformation("Publishing new-listing alert for {Symbol} from {Venue}", listing.Symbol, listing.Venue);
                     await PublishAsync(alert, cancellationToken).ConfigureAwait(false);
                 }
             }
@@ -171,12 +184,15 @@ public sealed class MarketScanner
             {
                 var items = await _watchlist.GetAllAsync(cancellationToken).ConfigureAwait(false);
                 var assets = items.Select(i => i.Token.BaseAsset).Distinct().ToArray();
+                _logger.LogDebug("Whale poll starting with {AssetCount} watched assets", assets.Length);
 
                 if (assets.Length > 0)
                 {
                     var whales = await _whales.GetRecentAsync(assets, cancellationToken).ConfigureAwait(false);
+                    _logger.LogDebug("Whale poll returned {WhaleCount} results", whales.Count);
                     foreach (var whale in whales)
                     {
+                        _logger.LogInformation("Publishing whale alert for {Symbol}", whale.Symbol);
                         await PublishAsync(whale, cancellationToken).ConfigureAwait(false);
                     }
                 }
@@ -196,11 +212,13 @@ public sealed class MarketScanner
 
     private async Task PublishAsync(Alert alert, CancellationToken cancellationToken)
     {
+        _logger.LogDebug("Publishing alert {AlertId} [{AlertType}] for {Symbol}", alert.Id, alert.Type, alert.Symbol ?? "<none>");
         _alertSink.Publish(alert);
 
         var profile = await _userProfiles.GetAsync(cancellationToken).ConfigureAwait(false);
         if (profile.PushNotificationsEnabled)
         {
+            _logger.LogDebug("Dispatching notification for alert {AlertId}", alert.Id);
             try
             {
                 await _notifications.NotifyAsync(alert, cancellationToken).ConfigureAwait(false);
@@ -209,6 +227,10 @@ public sealed class MarketScanner
             {
                 _logger.LogWarning(ex, "Failed to deliver notification for alert {AlertId}", alert.Id);
             }
+        }
+        else
+        {
+            _logger.LogDebug("Notifications disabled for profile; skipping delivery for {AlertId}", alert.Id);
         }
     }
 
