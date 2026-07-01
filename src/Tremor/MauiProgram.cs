@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Tremor.Core.DependencyInjection;
 using Tremor.Core.Services.Abstractions;
@@ -20,8 +21,12 @@ public static class MauiProgram
                 // once TTF files are added under Resources/Fonts.
             });
 
+        // Optional bundled configuration (thresholds, affiliate link, etc.).
+        // Falls back to TremorOptions defaults if the file is missing/unreadable.
+        LoadBundledAppSettings(builder);
+
         // Platform-agnostic services (market data, detection, watchlist, etc.).
-        builder.Services.AddTremorCore();
+        builder.Services.AddTremorCore(builder.Configuration);
 
         // Persist watchlist + profile to the app data directory across restarts.
         builder.Services.AddFilePersistence(FileSystem.AppDataDirectory);
@@ -52,5 +57,20 @@ public static class MauiProgram
 #endif
 
         return builder.Build();
+    }
+
+    private static void LoadBundledAppSettings(MauiAppBuilder builder)
+    {
+        try
+        {
+            using var stream = FileSystem.OpenAppPackageFileAsync("appsettings.json")
+                .GetAwaiter()
+                .GetResult();
+            builder.Configuration.AddJsonStream(stream);
+        }
+        catch (Exception)
+        {
+            // No bundled config (or unreadable): defaults in TremorOptions apply.
+        }
     }
 }
